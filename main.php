@@ -24,7 +24,8 @@ if (isset($_SESSION['idUser'])) {
                 <?php
                 if($_SESSION['level']==0){
                 ?>
-                    <a href="addProduct.php">Ingresar nuevo stock a distribuidora</a>
+                    <a href="addProductDistri-one.php">Ingresar nuevo stock a distribuidora</a>
+                    <a href="addProductDistri-three.php">Confirmar / Eliminar stock a distribuidora</a>
                     <a href="viewCustomer.php">Dar salida de mercadería ecommerce</a>
                     <a href="addSaleShowroom.php">Registrar venta en tienda</a>
                 <!-- menú admin -->

@@ -1,6 +1,15 @@
 <?php
 session_start();
 if (isset($_SESSION['idUser'])) {
+    //********************************
+    //MODULO:INGRESAR STOCK EN DISTRIBUIDORA
+    //USUARIO: DEPÓSITO
+    //OBJETIVO: LEER EL CÓDIGO DE BARRA PARA BUSCAR AUTOMÁTICAMENTE EL PRODUCTO DENTRO DE LA BASE DE DATOS
+    //ENTRADAS: BARCODE
+    //SALIDAS:
+    //AUTOR: AUSTRY CASTILLO
+    //FECHA: JUNIO 2024
+    //*************************** */
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -11,13 +20,7 @@ if (isset($_SESSION['idUser'])) {
     <link rel="stylesheet" href="css/index.css">
 </head>
 <body>
-    <header>
-        <a href="main.php"><img src="images/logo.jpg" alt="verdemas" class="logo"></a>
-    </header>
-    <main>
-    <div class="login">
-    <div class="containerMenu">
-                <a href="main.php">menú</a><br>
+    <?php include_once("header.php"); ?>
     </div>
         <h1>Ingresar stock en distribuidora</h1><br>
         <script>
@@ -35,7 +38,8 @@ if (isset($_SESSION['idUser'])) {
             codeBarInput.focus(); // Asegurar que el campo esté enfocado al cargar la página
         };
     </script>
-         <form action="addProductUnid.php" class="loginForm2" method="POST">
+    <!--Form de lectura del código de barra-->
+         <form action="addProductDistri-two.php" class="loginForm2" method="POST">
                 <label for="user">
                     <input type="text" name="barcode" placeholder="Usa el lector de código de barra" autofocus>
                     <button name="buscar">Buscar Producto</button>
@@ -49,5 +53,6 @@ if (isset($_SESSION['idUser'])) {
 </body>
 </html>
 <?php } else{
+    //si no está autorizado se envía el inicio
     header("location:./index.php?rta=<p style=color:red;text-align:center;>Debe estar autorizado para ver el contenido</p>");
 } ?>

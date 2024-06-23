@@ -33,7 +33,7 @@ if (isset($_SESSION['idUser'])) {
                 }
                 else if($_SESSION['level']==1){
                 ?>
-                    <a href="tasks.php">Autorizar movimientos de mercadería</a>
+                    <a href="authorizeEntriesDistri.php">Autorizar entradas de mercadería en Distribuidora</a>
                     <a href="inventory.php">Ver inventario de productos</a>
                     <a href="panelCustomer.php">Ir al panel de Clientes</a>
                     <a href="panelUser.php">Controlar usuarios</a>

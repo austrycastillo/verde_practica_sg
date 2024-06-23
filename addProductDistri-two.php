@@ -53,6 +53,13 @@ if (isset($_SESSION['idUser'])) {
             return false;
         }
 
+        // Verificar que no carguen excesivos productos
+        if (input.length > 4) {
+            mensajeError.textContent = "El valor no puede ser tan grande.";
+            event.preventDefault();
+            return false;
+        }
+
         // Si pasa todas las validaciones, limpiar el mensaje de error
         mensajeError.textContent = "";
         return true;
@@ -74,7 +81,7 @@ if (isset($_SESSION['idUser'])) {
             <form action="addProductDistri-three.php" class="loginForm2" method="POST" name="miFormulario" onsubmit="return validarFormulario(event)">
                 <label for="user">
                     <input type="text" placeholder="<?=$data['description']?>" disabled>
-                    <input type="number" name="unid" placeholder="ingresa las unidades" autofocus>
+                    <input type="text" name="unid" placeholder="ingresa las unidades" autofocus maxlength="10" required>
                     <input type="hidden" name="barcode" value="<?=$_POST['barcode'];?>">
                     <button name="ingresar" type="submit">Ingresar</button>
                 </label>

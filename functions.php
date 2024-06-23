@@ -200,7 +200,7 @@ function searchProductOperationNotConfirm($barcode)
     global $conexion;
     $data = null;
     try{
-        $sql = "SELECT *FROM operation WHERE barcode=?";
+        $sql = "SELECT *FROM operation WHERE barcode=? and authorized = 0";
         $stmt = $conexion->prepare($sql);
         $stmt->bindParam(1, $barcode, PDO::PARAM_INT);
         if ($stmt->execute()) {
@@ -229,7 +229,7 @@ function editProductOperationNotConfirm($stock,$barcode,$dateInfo)
 {
     global $conexion;
     try{
-        $sql = "UPDATE operation SET stock = ?,dateInfo = ? WHERE barcode=?";
+        $sql = "UPDATE operation SET stock = ?,dateInfo = ? WHERE barcode=? and authorized = 0";
         $stmt = $conexion->prepare($sql);
         $stmt->bindParam(1, $stock, PDO::PARAM_INT);
         $stmt->bindParam(2, $dateInfo, PDO::PARAM_STR);
@@ -245,4 +245,129 @@ function editProductOperationNotConfirm($stock,$barcode,$dateInfo)
         echo $e->getMessage();
     }
     
+}
+
+
+
+
+
+
+/***************FUNCIÓN PARA CONFIRMAR EL LISTADO DE MERCADERIA POR INGRESAR A LA DISTRIBUIDORA EN LISTA TEMPORAL POR DEPO****************/
+function confirmOperationDistri()
+{
+    global $conexion;
+    try{
+        $sql = "UPDATE operation SET authorized = ? WHERE authorized =?";
+        $nco = 0;
+        $co = 1;
+        $stmt = $conexion->prepare($sql);
+        $stmt->bindParam(1,$co, PDO::PARAM_INT);
+        $stmt->bindParam(2, $nco, PDO::PARAM_INT);
+        if ($stmt->execute()) {
+            echo "<div align=center style=color:green>Mercadería confirmada correctamente</div>";            
+        } else {
+            echo "Error interno, por favor intente más tarde o reporte al administrador...";
+            //error del query
+        }
+    }catch(Exception $e){
+        echo $e->getMessage();
+    }
+    
+}
+
+
+
+
+
+
+/***************FUNCIÓN PARA AUTORIZAR POR ADMIN EL INGRESO DE MERCADERÍA A DISTRIBUIDORA EN LISTA TEMPORAL DESDE DEPO E IMPACTAR EN EL INVENTARIO****************/
+function authorizeOperationDistri()
+{
+    global $conexion;
+    try{
+        
+        $sql = "SELECT *FROM operation WHERE authorized = ?";
+        $a = 1;
+        $flag = false;
+        $stmt = $conexion->prepare($sql);
+        $stmt->bindParam(1,$a, PDO::PARAM_INT);
+        if ($stmt->execute()) {
+            $data = $stmt->fetchAll();
+            if (!$data) {  
+                echo "error sin datos";
+                //no existe dato
+            }else{
+               // echo  $data['stock']."<br>";
+                foreach ($data as $prod) {  
+                    //echo  $prod['stock']."<br>";
+                    $sql2 = "SELECT stock FROM product WHERE barcode = ?";
+                    $stmt2 = $conexion->prepare($sql2);
+                    $stmt2->bindParam(1,$prod['barcode'], PDO::PARAM_INT);
+                    if ($stmt2->execute()) {
+                        $data2 = $stmt2->fetch();
+                        //echo $data2['stock']."<br>";
+                        $stock = $data2['stock'] + $prod['stock'];
+                        //echo $stock."<br>";
+                        $sql3="UPDATE product SET stock = ? WHERE barcode =?";
+                        $stmt3 = $conexion->prepare($sql3);
+                        $stmt3->bindParam(1,$stock, PDO::PARAM_INT);
+                        $stmt3->bindParam(2,$prod['barcode'], PDO::PARAM_INT);
+                        if ($stmt3->execute()) {
+                           //echo "<div align=center style=color:green>Autorizado correctamente, inventario actualizado</div>";
+                           $sql4="UPDATE operation SET authorized = ? WHERE barcode =?";
+                           $a=2;
+                           $stmt4 = $conexion->prepare($sql4);
+                           $stmt4->bindParam(1,$a, PDO::PARAM_INT);
+                           $stmt4->bindParam(2,$prod['barcode'], PDO::PARAM_INT);
+                           if($stmt4->execute())
+                            $flag = true;                         
+                        }else{       
+                            echo "Error interno 3, por favor intente más tarde o reporte al administrador...";
+                            //error del query
+                        }   
+                    }else{       
+                        echo "Error interno 2, por favor intente más tarde o reporte al administrador...";
+                        //error del query
+                    }   
+                }
+            }
+        } else {
+            echo "Error interno 1, por favor intente más tarde o reporte al administrador...";
+            //error del query
+        }
+        if($flag)
+            echo "<div align=center style=color:green>Autorizado correctamente, inventario actualizado</div>";    
+    }catch(Exception $e){
+        echo $e->getMessage();
+    }
+    
+}
+
+
+
+
+
+
+/***************FUNCIÓN PARA BUSCAR LISTADO DE PRODUCTOS A INGRESAR EN DISTRI SIN AUTORIZAR POR ADMIN****************/
+function searchProductsNoAuthorize()
+{
+    global $conexion;
+    $data=null;
+    try{
+        $sql = "SELECT *FROM operation WHERE authorized = 1 ORDER BY dateInfo DESC";
+        $stmt = $conexion->prepare($sql);
+        if ($stmt->execute()) {
+            $data = $stmt->fetchAll();
+            if (!$data) {  
+                echo "Sin datos para autorizar";
+                //no existe dato
+            }
+        } else {
+            echo "Error interno, por favor intente más tarde o reporte al administrador...";
+            //error del query
+        }
+        return $data;   
+    }catch(Exception $e){
+        echo $e->getMessage();
+    }    
 }

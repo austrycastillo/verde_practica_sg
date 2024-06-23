@@ -2,9 +2,9 @@
 session_start();
 if (isset($_SESSION['idUser'])) {
     //********************************
-    //MODULO:INGRESAR STOCK EN DISTRIBUIDORA III
-    //USUARIO: DEPÓSITO
-    //OBJETIVO: INGRESAR LOS NUEVOS STOCK A UNA TABLA TEMPORAL EN STATUS PENDIENTE DE CONFIRMAR, MOSTRAR LA LISTA A CONFIRMAR, ELIMINAR PRODUCTOS DE LA LISTA
+    //MODULO:AUTORIZAR INGRESOS DE  STOCK EN DISTRIBUIDORA 
+    //USUARIO: ADMIN
+    //OBJETIVO: AUTORIZAR LOS NUEVOS STOCK DE UNA TABLA TEMPORAL PARA IMPACTAR EN EL INVENTARIO, MOSTRAR LA LISTA A CONFIRMAR, ELIMINAR PRODUCTOS DE LA LISTA
     //ENTRADAS: BARCODE
     //SALIDAS: DATOS PRODUCTOS, MENSAJES
     //AUTOR: AUSTRY CASTILLO
@@ -24,9 +24,9 @@ if (isset($_SESSION['idUser'])) {
 
 <body>
                 <?php include_once("header.php"); ?>
-                <a href="addProductDistri-one.php" autofocus>Ingresar otro producto</a>
+                
             </div>
-            <h1>Stock por confirmar en distribuidora</h1><br>
+            <h1>Autorizar Stock por ingresar en la distribuidora</h1><br>
 
     <?php
     include "functions.php";
@@ -34,24 +34,8 @@ if (isset($_SESSION['idUser'])) {
     if(isset($_GET['oper'])&&($_GET['oper']=='del')){
         deleteProduct($_GET['barcode']);
     }elseif(isset($_GET['oper'])&&($_GET['oper']=='con9fi7rm8-')){//INVOCO A LA FUNCIÓN PARA CONFIRMAR EL INGRESO DE MERCADERÍA A AUTORIZAR
-        confirmOperationDistri();
-    }elseif(isset($_POST['barcode'])){//INVOCO FUNCIONES PARA MOSTRAR PRODUCTOS POR CONFIRMAR E INSERTO SI ES EL CASO
-        
-        $data = searchProductOperationNotConfirm($_POST['barcode']);
-        if($data!=null){
-            $stock =$data['stock'] + $_POST['unid'];
-           editProductOperationNotConfirm($stock,$_POST['barcode'],date('Y-m-d H:i:s'));
-        }else{
-            if(($_POST['unid'] == "") || ($_POST['unid'] == 0) || (strlen($_POST['unid']) > 4) ){
-                echo "error, debe revisar el valor que intenta ingresar";
-            }else{
-                $datos = array($_SESSION['idUser'],$_POST['barcode'],date('Y-m-d H:i:s'),$_POST['unid']);
-                insertProduct($datos);
-            }
-        }
-        
+        authorizeOperationDistri();
     }
-    
         
     ?>
            
@@ -69,7 +53,7 @@ if (isset($_SESSION['idUser'])) {
             </thead>
             <tbody>
                 <?php
-                $data = searchProductsNoConfirm();
+                $data = searchProductsNoAuthorize();
                 foreach ($data as $file) {  
                     $data2 = searchProduct($file['barcode']);
                 ?>
@@ -78,13 +62,13 @@ if (isset($_SESSION['idUser'])) {
                 <td><?=$file['barcode']?></td>
                 <td><?=$data2['description']?></td>
                 <td><?=$file['stock']?></td>
-                <td><a href="#" onclick="if (confirm('¿Estás seguro de que desea borrar <?=$data2['description']?>?')) { window.location.href='addProductDistri-three.php?oper=del&barcode=<?=$file['barcode']?>'; }">❌</a></td>
+                <td><a href="#" onclick="if (confirm('¿Estás seguro de que desea borrar <?=$data2['description']?>?')) { window.location.href='authorizeEntriesDistri.php?oper=del&barcode=<?=$file['barcode']?>'; }">❌</a></td>
                 </tr>
             </tbody>
             <?php } ?>
         </table>
                    
-        <a href="#" onclick="if (confirm('¿Estás seguro/a de que desea confirmar el ingreso de mercadería en la Distribuidora?\n\n\t- Asegurate de haber revisado muy bien el stock a incluir')) { window.location.href='addProductDistri-three.php?oper=con9fi7rm8-'; }">Confirmar ingreso de mercadería en la Distribuidora</a>
+        <a href="#" onclick="if (confirm('¿Estás seguro/a de que desea autorizar el ingreso de mercadería en la Distribuidora?\n\n\t- Asegurate de haber revisado muy bien el stock a incluir ya que impacta el inventario')) { window.location.href='authorizeEntriesDistri.php?oper=con9fi7rm8-'; }">Autorizar ingreso de mercadería en la Distribuidora</a>
             </div>
         </div>
     </main>

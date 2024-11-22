@@ -11,26 +11,28 @@ if (isset($_SESSION['idUser'])) {
     <link rel="stylesheet" href="css/index.css">
 </head>
 <body>
-    <header>
-        <a href="main.php"><img src="images/logo.jpg" alt="verdemas" class="logo"></a>
-    </header>
-    <main>
+<?php include_once("header.php"); ?>
+</div>
        
         <div class="login">
-            <!--menu-->
-            <div class="containerMenu">
-                <a href="main.php">menú</a><br>
-            </div>
+            
             <h1>Selecciona un ecommerce</h1><br>
             <!-- formulario -->
-            <form action="addProductCustomer.php" class="loginForm2" method="post">
-                <select name="cliente" id="cliente" class="lista">
-                        <option>verde+</option>
-                        <option>kita</option>
-                        <option>meval</option>
+            <?php
+                        include "functions.php";
+                        $data = searchCustomers();
+            ?>
+            <form action="addProductCustomer-one.php" class="loginForm2" method="post">
+                <select name="idCustomer" id="cliente" class="lista" autofocus>
+                    <?php
+                        foreach ($data as $file) {  
+                            
+                    ?>
+                        <option value="<?=$file['idCustomer']?>"><?=$file['nameCustomer']?></option>
+                       <?php } ?>
                     </select>
                     <input type="hidden" name="idCliente" value="2">
-                    <button name="buscar">Buscar</button>
+                    <button name="buscar" style="cursor: pointer;">Buscar</button>
                     
                 </form>
                

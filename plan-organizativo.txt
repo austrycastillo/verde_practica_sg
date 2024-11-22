@@ -1,0 +1,31 @@
+*************módulos usuario depo***********
+1) ingresar nuevo stock a distribuidora
+	✅ listo
+2) confirmar/eliminar nuevo stock a distribuidora
+	✅ listo
+3) dar salida de mercadería ecommerce
+	✅ listo
+4) registrar venta en tienda 
+
+
+*************módulos usuario admin**********
+1) autorizar entradas de mercadería en distribuidora
+	✅ listo
+2) ver inventario de productos
+	2.1) ver listado completo
+		✅ listo
+	2.2) filtrar por stock menor a 12
+		✅ listo
+	2.3) filtrar al buscar por texto introducido, por ej. marca, nombre...
+		✅ listo
+
+3) autorizar entradas de mercadería en ecommerce 
+	✅ listo
+4) ir panel de clientes (--trabajando ahora)
+5) controlar usuario
+
+
+
+
+
+

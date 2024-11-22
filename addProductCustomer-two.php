@@ -1,15 +1,6 @@
 <?php
 session_start();
 if (isset($_SESSION['idUser'])) {
-     //********************************
-    //MODULO:INGRESAR STOCK EN DISTRIBUIDORA II
-    //USUARIO: DEPÓSITO
-    //OBJETIVO: BUSCA EL PRODUCTO POR CÓDIGO DE BARRA, MUESTRA LOS DATOS EN UN FORM, PARA CARGAR EL NUEVO STOCK
-    //ENTRADAS: STOCK
-    //SALIDAS: MENSAJES
-    //AUTOR: AUSTRY CASTILLO
-    //FECHA: JUNIO 2024
-    //*************************** */
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -19,13 +10,6 @@ if (isset($_SESSION['idUser'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Verdemas-SG</title>
     <link rel="stylesheet" href="css/index.css">
-    <style>
-        /*color para el mensaje de error */
-        .error {
-            color: red;
-            font-size: 14px;
-        }
-    </style>
     <script>
         //validamos el form
     function validarFormulario(event) {
@@ -68,30 +52,33 @@ if (isset($_SESSION['idUser'])) {
 </head>
 
 <body>
-<?php include_once("header.php"); ?>
-            </div>
-            <h1>Ingresar stock en distribuidora</h1><br>
-
-    <?php
+<?php 
+    include_once("header.php"); 
     include "functions.php";
+    $data = searchCustomerById($_POST['idCustomer']);
     //echo $_POST['barcode'];
-    $data = searchProduct($_POST['barcode']);
+    $data2 = searchProduct($_POST['barcode']);
     if($data){
-    ?>
-            <form action="addProductDistri-three.php" class="loginForm2" method="POST" name="miFormulario" onsubmit="return validarFormulario(event)">
+?>
+</div>
+            <h1>Dar salida para ecommerce <?=$data['nameCustomer']?></h1><br>
+
+
+            <form action="addProductCustomer-three.php" class="loginForm2" method="POST" name="miFormulario" onsubmit="return validarFormulario(event)">
                 <label for="user">
-                    <input type="text" placeholder="<?=$data['description']?>" disabled>
+                    <input type="text" placeholder="<?=$data2['description']?>" disabled>
                     <input type="text" name="unid" placeholder="ingresa las unidades" autofocus maxlength="10" required>
                     <input type="hidden" name="barcode" value="<?=$_POST['barcode'];?>">
+                    <input type="hidden" name="idCustomer" value="<?=$_POST['idCustomer']?>">
+
                     <button name="ingresar" type="submit">Ingresar</button>
                 </label>
-                <p id="mensajeError" class="error"></p>
             </form>
+            <p id="mensajeError" class="error" style="color:red;text-align:center"></p> 
 <?php
     }
 ?>
-    
-           
+            
         </div>
     </main>
 
@@ -100,6 +87,5 @@ if (isset($_SESSION['idUser'])) {
 
 </html>
 <?php } else{
-    //si no está autorizado se envía el inicio
     header("location:./index.php?rta=<p style=color:red;text-align:center;>Debe estar autorizado para ver el contenido</p>");
 } ?>

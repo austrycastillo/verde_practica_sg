@@ -83,8 +83,11 @@ if (isset($_SESSION['idUser'])) {
             </tbody>
             <?php } ?>
         </table>
-                   
-        <a href="#" onclick="if (confirm('¿Estás seguro/a de que desea confirmar el ingreso de mercadería en la Distribuidora?\n\n\t- Asegurate de haber revisado muy bien el stock a incluir')) { window.location.href='addProductDistri-three.php?oper=con9fi7rm8-'; }">Confirmar ingreso de mercadería en la Distribuidora</a>
+              <?php
+              if($data){
+              ?>
+                <a href="#" onclick="if (confirm('¿Estás seguro/a de que desea confirmar el ingreso de mercadería en la Distribuidora?\n\n\t- Asegurate de haber revisado muy bien el stock a incluir')) { window.location.href='addProductDistri-three.php?oper=con9fi7rm8-'; }">Confirmar ingreso de mercadería en la Distribuidora</a>
+             <?php } ?>
             </div>
         </div>
     </main>

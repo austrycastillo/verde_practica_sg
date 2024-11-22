@@ -1,15 +1,6 @@
 <?php
 session_start();
 if (isset($_SESSION['idUser'])) {
-    //********************************
-    //MODULO:INGRESAR STOCK EN DISTRIBUIDORA
-    //USUARIO: DEPÓSITO
-    //OBJETIVO: LEER EL CÓDIGO DE BARRA PARA BUSCAR AUTOMÁTICAMENTE EL PRODUCTO DENTRO DE LA BASE DE DATOS
-    //ENTRADAS: BARCODE
-    //SALIDAS:
-    //AUTOR: AUSTRY CASTILLO
-    //FECHA: JUNIO 2024
-    //*************************** */
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -18,12 +9,7 @@ if (isset($_SESSION['idUser'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Verdemas-SG</title>
     <link rel="stylesheet" href="css/index.css">
-</head>
-<body>
-    <?php include_once("header.php"); ?>
-    </div>
-        <h1>Ingresar stock en distribuidora</h1><br>
-        <script>
+    <script>
              //validamos el form
     function validarFormulario(event) {
         var input = document.forms["miFormulario"]["barcode"].value;
@@ -70,26 +56,44 @@ if (isset($_SESSION['idUser'])) {
         // }
 
         window.onload = function() {
-            const codeBarInput = document.querySelector('input[name="codeBar"]');
-            codeBarInput.addEventListener('keypress', validarFormulario);
+            // const codeBarInput = document.querySelector('input[name="barcode"]');
+            // codeBarInput.addEventListener('keypress', validarFormulario);
             codeBarInput.focus(); // Asegurar que el campo esté enfocado al cargar la página
         };
     </script>
-    <!--Form de lectura del código de barra-->
-         <form action="addProductDistri-two.php" class="loginForm2" method="POST" name="miFormulario" onsubmit="return validarFormulario(event)">
+</head>
+<body>
+<?php 
+    include_once("header.php"); 
+    include "functions.php";
+    if(isset($_POST['idCustomer'])){
+        $data = searchCustomerById($_POST['idCustomer']);
+       
+    }else if(isset($_GET['idCustomer'])){
+        $data = searchCustomerById($_GET['idCustomer']);
+       
+    }
+    
+?>
+<a href="addProductCustomer-three.php?idCustomer=<?=(isset($_POST['idCustomer'])) ? $_POST['idCustomer'] : $_GET['idCustomer']?>">Confirmar / Eliminar salida de mercadería para ecommerce</a>
+</div>
+        <h1>Dar salida para ecommerce <?=$data['nameCustomer']?></h1><br>
+      
+       
+         <form action="addProductCustomer-two.php" class="loginForm2" method="POST" name="miFormulario" onsubmit="return validarFormulario(event)">
                 <label for="user">
                     <input type="text" name="barcode" placeholder="Usa el lector de código de barra" autofocus>
-                    <button name="buscar">Buscar Producto</button>
+                    <input type="hidden" name="idCustomer" value="<?=$data['idCustomer']?>">
+                    <button name="buscar" style="cursor: pointer;">Buscar Producto</button>
                 </label>
          </form>
          <p id="mensajeError" class="error" style="color:red;text-align:center"></p> 
         </div>
     </main>
     
-    <script src="js/index.js"></script>
+    
 </body>
 </html>
 <?php } else{
-    //si no está autorizado se envía el inicio
     header("location:./index.php?rta=<p style=color:red;text-align:center;>Debe estar autorizado para ver el contenido</p>");
 } ?>

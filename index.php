@@ -8,7 +8,7 @@
 </head>
 <body>
     <header>
-        <img src="images/logo.jpg" alt="verdemas" class="logo">
+        <a href="index.php"><img src="images/logo.jpg" alt="verdemas" class="logo"></a>
     </header>
     <main>
         <div class="login">
@@ -16,24 +16,25 @@
                 <label for="user">
                     <input type="text" name="user" placeholder="Usuario">
                     <input type="password" name="password" placeholder="Contraseña">
-                    <button>Ingresar al sistema</button>
+                    <button style="cursor: pointer;">Ingresar al sistema</button>
                 </label>
             </form>
             <?php
                             include "functions.php";
+                            include "conexion.php";
 
-                            if (isset($_POST['user'])) {
-                                $rta = loguear($_POST['user'], $_POST['password']);
+                            if (isset($_POST['user'])) {                               
+                                $rta = loguear($_POST['user'], $_POST['password'],$conexion);
                                 echo $rta;
                             }
                             if(isset($_GET['rta'])){
-                                echo $_GET['rta'];
+                                echo sendMessages($_GET['rta']);
                             }
                             if(isset($_GET['logout']) && $_GET['logout']==true){
                                 session_start();//recuperar la sessión para destruirla
                                 unset($_SESSION);//borrar el contenido de las variables SESSION
                                 session_destroy();//destruir la session
-                                setcookie(session_name(),null);
+                                setcookie(session_name(),'null');
                                 header("location:./index.php?rta=<br><p style=color:green;text-align:center;>Saliste del sistema, nos vemos pronto!</p>");
                                 
                             }

@@ -4,4 +4,4 @@
 <main>
         <div class="login">
             <div class="containerMenu">
-                <a href="main.php">menú</a>
+                <a href="main.php">🔙 Volver al menú principal</a>

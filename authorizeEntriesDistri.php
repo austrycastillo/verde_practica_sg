@@ -7,7 +7,7 @@ if (isset($_SESSION['idUser'])) {
     //OBJETIVO: AUTORIZAR LOS NUEVOS STOCK DE UNA TABLA TEMPORAL PARA IMPACTAR EN EL INVENTARIO, MOSTRAR LA LISTA A CONFIRMAR, ELIMINAR PRODUCTOS DE LA LISTA
     //ENTRADAS: BARCODE
     //SALIDAS: DATOS PRODUCTOS, MENSAJES
-    //AUTOR: AUSTRY CASTILLO
+    //AUTOR: ING. AUSTRY CASTILLO
     //FECHA: JUNIO 2024
     //*************************** */
 ?>
@@ -44,31 +44,38 @@ if (isset($_SESSION['idUser'])) {
         <table class="table">
             <thead>
                  <tr>
-                    <th scope="col">Fecha</th>
-                    <th scope="col">Código de barra</th>
-                    <th scope="col">Producto</th>
-                    <th scope="col">Cantidad</th>
+                     <th scope="col">Código de barra</th>
+                     <th scope="col">Producto</th>
+                     <th scope="col">Cantidad</th>
+                     <th scope="col">Fecha y hora</th>
+                     <th scope="col">Usuario de carga</th>
                     <th scope="col"></th>
                 </tr>
             </thead>
             <tbody>
                 <?php
                 $data = searchProductsNoAuthorize();
-                foreach ($data as $file) {  
+                foreach ($data as $file) {   
                     $data2 = searchProduct($file['barcode']);
+                    $data3 = searchNameUser($file['idUser']);
                 ?>
                 <tr>
-                <td><?=$file['dateInfo']?></td>
-                <td><?=$file['barcode']?></td>
-                <td><?=$data2['description']?></td>
-                <td><?=$file['stock']?></td>
+                    <td><?=$file['barcode']?></td>
+                    <td><?=$data2['description']?></td>
+                    <td><?=$file['stock']?></td>
+                    <td><?=$file['dateInfo']?></td>
+                    <td><?=$data3['nameUser']?></td>
                 <td><a href="#" onclick="if (confirm('¿Estás seguro de que desea borrar <?=$data2['description']?>?')) { window.location.href='authorizeEntriesDistri.php?oper=del&barcode=<?=$file['barcode']?>'; }">❌</a></td>
                 </tr>
             </tbody>
             <?php } ?>
-        </table>
+        </table> 
+            <?php
+              if($data){
+              ?>
                    
-        <a href="#" onclick="if (confirm('¿Estás seguro/a de que desea autorizar el ingreso de mercadería en la Distribuidora?\n\n\t- Asegurate de haber revisado muy bien el stock a incluir ya que impacta el inventario')) { window.location.href='authorizeEntriesDistri.php?oper=con9fi7rm8-'; }">Autorizar ingreso de mercadería en la Distribuidora</a>
+                 <a href="#" onclick="if (confirm('¿Estás seguro/a de que desea autorizar el ingreso de mercadería en la Distribuidora?\n\n\t- Asegurate de haber revisado muy bien el stock a incluir ya que impacta el inventario')) { window.location.href='authorizeEntriesDistri.php?oper=con9fi7rm8-'; }">Autorizar ingreso de mercadería en la Distribuidora</a>
+            <?php } ?>
             </div>
         </div>
     </main>

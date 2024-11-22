@@ -13,15 +13,11 @@ if (isset($_SESSION['idUser'])) {
 </head>
 
 <body>
-    <header>
-        <a href="main.php"><img src="images/logo.jpg" alt="verdemas" class="logo"></a>
-    </header>
-    <main>
-        <div class="login">
+<?php include_once("header.php"); ?></div>
             <h1>Lista de clientes</h1>
             <div class="containerMenu">
                 <a href="addCustomer.php">Agregar nuevo cliente</a>
-                <a href="main.php">Volver al menú principal</a><br>
+               
                 <p>verdemás</p>
                 <p>kita</p>
                 <p>meval</p>                

@@ -1,6 +1,15 @@
 <?php
 session_start();
 if (isset($_SESSION['idUser'])) {
+     //********************************
+    //MODULO:LISTA DE INVENTARIO DE MERCADERIA EN DISTRIBUIDORA 
+    //USUARIO: ADMIN
+    //OBJETIVO: MOSTRAR UN LISTADO DE PRODUCTOS EN DISTRIBUIDORA- BUSCAR POR NOMBRE - BUSCAR SIN STOCK - BUSCAR CON POCO STOCK
+    //ENTRADAS: DESCRIPTION, STOCK
+    //SALIDAS: DATOS PRODUCTOS, MENSAJES
+    //AUTOR: ING. AUSTRY CASTILLO
+    //FECHA: JULIO 2024
+    //*************************** */
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -24,39 +33,52 @@ table,tr,td{
     font-weight: bold;
 }
     </style>
+    
 </head>
 
 <body>
-    <header>
-        <a href="main.php"><img src="images/logo.jpg" alt="verdemas" class="logo"></a>
-    </header>
-    <main>
-        <div class="login">
+    <?php include_once("header.php"); ?>
+    </div>
             <h1>Lista de productos en inventario</h1>
             <div class="containerMenu">
-                <a href="main.php">Volver al menú principal</a><br>
+                
+                <a href="inventory.php">Ver todos los productos</a>
+                <a href="inventory.php?poco=true">Ver productos con poco stock</a><br>
+                <form action="inventory.php" class="loginForm2" method="POST" name="miFormulario">
+                <label for="user">
+                    <input type="text" name="texto" placeholder="Filtrar por ...(escribí algo, ej. magnesio)" autofocus>                    
+                </label>
+             </form><br>
+         <p id="mensajeError" class="error" style="color:red;text-align:center"></p> 
                 <table>
                     <tr class="td-title">
                         <td>Marca</td>
                         <td>Producto</td>
-                        <td>stock</td>
+                        <td>Precio</td>
+                        <td>Stock</td>
                     </tr>
+                    <?php
+                        include "functions.php";
+                        if(isset($_POST['texto'])){
+                           // echo $_POST['texto'];
+                            $data = searchProductByText($_POST['texto']);
+                            //var_dump($data);
+                           
+                        }else if(isset($_GET['poco']) && ($_GET['poco']=='true')){
+                            $data = searchProductsShort();
+                        }else{
+                            $data = searchProducts();
+                        }
+                            foreach ($data as $file) {  
+                            $data2 = searchBrand($file['idBrand']);
+                    ?>
                     <tr>
-                        <td>Natier</td>
-                        <td>Magnesio</td>
-                        <td>200</td>
+                        <td><?=$data2['nameBrand']?></td>
+                        <td><?=$file['description']?></td>
+                        <td><?=$file['price']?></td>
+                        <td><?=$file['stock']?></td>
                     </tr>
-                    <tr>
-                        <td>Natier</td>
-                        <td>Vitamina d3</td>
-                        <td>24</td>
-                    </tr>
-                    <tr>
-                        <td>Frenzzi</td>
-                        <td>Shampoo sin sal</td>
-                        <td>115</td>
-                    </tr>
-                    
+                  <?php }  ?>
                 </table>
                                
             </div>

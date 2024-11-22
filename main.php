@@ -24,19 +24,20 @@ if (isset($_SESSION['idUser'])) {
                 <?php
                 if($_SESSION['level']==0){
                 ?>
+                    <a href="viewCustomer.php" selected>Salida de mercadería para ecommerce</a>
                     <a href="addProductDistri-one.php">Ingresar nuevo stock a distribuidora</a>
-                    <a href="addProductDistri-three.php">Confirmar / Eliminar stock a distribuidora</a>
-                    <a href="viewCustomer.php">Dar salida de mercadería ecommerce</a>
-                    <a href="addSaleShowroom.php">Registrar venta en tienda</a>
+                    <a href="addProductDistri-three.php">Confirmar / Eliminar nuevo stock a distribuidora</a>
+                    <a href="addSaleShowroom.php" style="pointer-events: none; color: grey;">Registrar venta en tienda</a>
                 <!-- menú admin -->
                 <?php
                 }
                 else if($_SESSION['level']==1){
                 ?>
+                    <a href="authorizeExitCustomer.php">Autorizar salidas de mercadería para Ecommerce</a>
                     <a href="authorizeEntriesDistri.php">Autorizar entradas de mercadería en Distribuidora</a>
                     <a href="inventory.php">Ver inventario de productos</a>
-                    <a href="panelCustomer.php">Ir al panel de Clientes</a>
-                    <a href="panelUser.php">Controlar usuarios</a>
+                    <a href="panelCustomer.php" style="pointer-events: none; color: grey;">Ir al panel de Clientes</a>
+                    <a href="panelUser.php" style="pointer-events: none; color: grey;">Controlar usuarios</a>
                 <?php
                 }
                 ?>
